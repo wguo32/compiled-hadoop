@@ -42,6 +42,7 @@ RUN mv /tmp/ssh_config ~/.ssh/config && \
     mv /tmp/yarn-site.xml $HADOOP_HOME/etc/hadoop/yarn-site.xml && \
     mv /tmp/slaves $HADOOP_HOME/etc/hadoop/slaves && \
     mv /tmp/start-hadoop.sh ~/start-hadoop.sh && \
+    mv /tmp/stop-hadoop.sh ~/stop-hadoop.sh && \
     mv /tmp/start-zookeeper.sh ~/start-zookeeper.sh && \
     mv /tmp/run-wordcount.sh ~/run-wordcount.sh && \
     mv /tmp/zoo.cfg /usr/local/zookeeper-3.4.10/conf/
