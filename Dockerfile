@@ -7,23 +7,21 @@ WORKDIR /root
 # install openssh-server, openjdk and wget
 RUN apt-get update && apt-get install -y openssh-server openjdk-8-jdk wget
 #install zookeeper
-RUN curl http://www.gtlib.gatech.edu/pub/apache/zookeeper/zookeeper-3.4.10/zookeeper-3.4.10.tar.gz -o zookeeper-3.4.10.tar.gz && \
+RUN wget http://www.gtlib.gatech.edu/pub/apache/zookeeper/zookeeper-3.4.10/zookeeper-3.4.10.tar.gz && \
 	tar -xzf zookeeper-3.4.10.tar.gz && \
 	mv zookeeper-3.4.10 /usr/local/zookeeper-3.4.10 && \
-	mv /tmp/zoo.cfg /usr/local/zookeeper-3.4.10/conf/ && \
-	cp conf/zoo_sample.cfg conf/zoo.cfg && \
-	./bin/zkServer.sh start && \ 
 	rm zookeeper-3.4.10.tar.gz
 
 # install hadoop 2.7.5
-RUN wget https://github.com/wguo32/compiled-hadoop/archive/2.7.5.tar.gz && \
-    tar -xzvf hadoop-2.7.5.tar.gz && \
+RUN wget -O hadoop-2.7.5.tar.gz https://master.dl.sourceforge.net/project/dockered-hadoop/2.7.5/hadoop-2.7.5.tar.gz  && \
+    tar -xzf hadoop-2.7.5.tar.gz && \
     mv hadoop-2.7.5 /usr/local/hadoop-2.7.5 && \
     rm hadoop-2.7.5.tar.gz
 
 # set environment variable
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 
-ENV HADOOP_HOME=/usr/local/hadoop-2.7.5 
+ENV HADOOP_HOME=/usr/local/hadoop-2.7.5
+ENV ZOOKEEPER_HOME=/usr/local/zookeeper-3.4.10
 ENV PATH=$PATH:/usr/local/hadoop-2.7.5/bin:/usr/local/hadoop-2.7.5/sbin 
 
 # ssh without key
@@ -44,9 +42,12 @@ RUN mv /tmp/ssh_config ~/.ssh/config && \
     mv /tmp/yarn-site.xml $HADOOP_HOME/etc/hadoop/yarn-site.xml && \
     mv /tmp/slaves $HADOOP_HOME/etc/hadoop/slaves && \
     mv /tmp/start-hadoop.sh ~/start-hadoop.sh && \
-    mv /tmp/run-wordcount.sh ~/run-wordcount.sh
+    mv /tmp/start-zookeeper.sh ~/start-zookeeper.sh && \
+    mv /tmp/run-wordcount.sh ~/run-wordcount.sh && \
+    mv /tmp/zoo.cfg /usr/local/zookeeper-3.4.10/conf/
 
 RUN chmod +x ~/start-hadoop.sh && \
+    chmod +x ~/start-zookeeper.sh && \
     chmod +x ~/run-wordcount.sh && \
     chmod +x $HADOOP_HOME/sbin/start-dfs.sh && \
     chmod +x $HADOOP_HOME/sbin/start-yarn.sh 

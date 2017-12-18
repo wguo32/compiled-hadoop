@@ -13,7 +13,7 @@ sudo docker run -itd \
                 -p 8088:8088 \
                 --name hadoop-master \
                 --hostname hadoop-master \
-                wguo32/hadoop:1.0 &> /dev/null
+                wguo32/compiled-hadoop:2.7.5 &> /dev/null
 
 
 # start hadoop slave container
@@ -26,7 +26,7 @@ do
 	                --net=hadoop \
 	                --name hadoop-slave$i \
 	                --hostname hadoop-slave$i \
-	                wguo32/hadoop:1.0 &> /dev/null
+	                wguo32/compiled-hadoop:2.7.5 &> /dev/null
 	i=$(( $i + 1 ))
 done 
 
