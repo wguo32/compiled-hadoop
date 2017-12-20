@@ -17,12 +17,19 @@ RUN wget -O hadoop-2.7.5.tar.gz https://master.dl.sourceforge.net/project/docker
     tar -xzf hadoop-2.7.5.tar.gz && \
     mv hadoop-2.7.5 /usr/local/hadoop-2.7.5 && \
     rm hadoop-2.7.5.tar.gz
+#install hbase    
+RUN wget http://www.gtlib.gatech.edu/pub/apache/hbase/1.2.6/hbase-1.2.6-bin.tar.gz && \
+    tar -xzf hbase-1.2.6-bin.tar.gz && \
+    mv hbase-1.2.6 /usr/local/hbase-1.2.6 && \
+    rm hbase-1.2.6-bin.tar.gz
+
 
 # set environment variable
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 
 ENV HADOOP_HOME=/usr/local/hadoop-2.7.5
 ENV ZOOKEEPER_HOME=/usr/local/zookeeper-3.4.10
-ENV PATH=$PATH:/usr/local/hadoop-2.7.5/bin:/usr/local/hadoop-2.7.5/sbin 
+ENV HBASE_HOME=/usr/local/hbase-1.2.6
+ENV PATH=$PATH:HADOOP_HOME/bin:HADOOP_HOME/sbin:$HBASE_HOME/bin:$ZOOKEEPER_HOME/bin
 
 # ssh without key
 RUN ssh-keygen -t rsa -f ~/.ssh/id_rsa -P '' && \
@@ -41,14 +48,21 @@ RUN mv /tmp/ssh_config ~/.ssh/config && \
     mv /tmp/mapred-site.xml $HADOOP_HOME/etc/hadoop/mapred-site.xml && \
     mv /tmp/yarn-site.xml $HADOOP_HOME/etc/hadoop/yarn-site.xml && \
     mv /tmp/slaves $HADOOP_HOME/etc/hadoop/slaves && \
+    mv /tmp/zoo.cfg $ZOOKEEPER_HOME/conf/ && \
+    mv /tmp/hbase-site.xml $HBASE_HOME/conf/ && \
+    mv /tmp/hbase-env.sh $HBASE_HOME/conf/ && \
+    mv /tmp/regionservers $HBASE_HOME/conf/ && \
     mv /tmp/start-hadoop.sh ~/start-hadoop.sh && \
     mv /tmp/stop-hadoop.sh ~/stop-hadoop.sh && \
     mv /tmp/start-zookeeper.sh ~/start-zookeeper.sh && \
     mv /tmp/run-wordcount.sh ~/run-wordcount.sh && \
-    mv /tmp/zoo.cfg /usr/local/zookeeper-3.4.10/conf/
+    mv /tmp/start-hadoop-zk-hbase.sh ~/start-hadoop-zk-hbase.sh && \
+    mv /tmp/stop-hadoop-zk-hbase.sh ~/stop-hadoop-zk-hbase.sh
 
 RUN chmod +x ~/start-hadoop.sh && \
     chmod +x ~/start-zookeeper.sh && \
+    chmod +x ~/start-hadoop-zk-hbase.sh && \
+    chmod +x ~/stop-hadoop-zk-hbase.sh && \
     chmod +x ~/run-wordcount.sh && \
     chmod +x $HADOOP_HOME/sbin/start-dfs.sh && \
     chmod +x $HADOOP_HOME/sbin/start-yarn.sh 
