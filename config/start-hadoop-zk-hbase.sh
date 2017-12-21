@@ -14,6 +14,6 @@ $ZOOKEEPER_HOME/bin/zkServer.sh start
 
 echo -e "\n"
 
-$HBASE/bin/start-hbase.sh
+$HBASE_HOME/bin/start-hbase.sh
 
 echo -e "\n"

@@ -14,6 +14,14 @@ sudo docker run -itd \
                 -p 2888:2888 \
                 -p 3888:3888 \
                 -p 2181:2181 \
+                -p 60000:60000 \
+                -p 60010:60010 \
+                -p 60020:60020 \
+                -p 60030:60030 \
+                -p 8080:8080 \
+                -p 8085:8085 \
+                -p 9090:9090 \
+                -p 9095:9095 \
                 --name hadoop-master \
                 --hostname hadoop-master \
                 wguo32/compiled-hadoop:latest &> /dev/null
